@@ -1,0 +1,26 @@
+explorer.exe
+svchost.exe
+system
+system idle process
+taskhostw.exe
+services.exe
+lsass.exe
+winlogon.exe
+csrss.exe
+smss.exe
+dwm.exe
+spoolsv.exe
+searchindexer.exe
+runtimebroker.exe
+ctfmon.exe
+conhost.exe
+notepad.exe
+calc.exe
+chrome.exe
+msedge.exe
+python.exe
+cmd.exe
+powershell.exe
+docker.exe
+nvcontainer.exe
+
