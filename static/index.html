@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RAMIREZ | Cyber Defense Operations</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Custom Styles (Oryn Glassmorphism) -->
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="min-h-screen w-screen flex flex-col p-4 md:p-6 overflow-x-hidden text-gray-100 bg-[#030712]">
+
+  <!-- HEADER AREA -->
+  <header class="glass-panel rounded-xl p-4 md:p-6 flex flex-col xl:flex-row justify-between items-start xl:items-center mb-6 gap-6 relative overflow-hidden">
+    <!-- Glowing Accent Top -->
+    <div class="panel-accent-top absolute top-0 left-0"></div>
+
+    <!-- Branding & Info -->
+    <div class="flex-shrink-0">
+      <h1 class="text-3xl font-extrabold tracking-tight">
+        <span class="text-neon">▣</span> RAMIREZ
+      </h1>
+      <p class="text-sm text-gray-400 mt-1 font-mono tracking-wide">MULTI-AGENT CYBERSECURITY DEFENSE SYSTEM</p>
+      
+      <div class="mt-4 flex flex-wrap gap-4 items-center">
+        <!-- Status -->
+        <div class="flex items-center space-x-2 bg-gray-900/60 px-3 py-1.5 rounded-full border border-gray-700/50">
+          <div class="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" style="box-shadow: 0 0 8px #00ff88;"></div>
+          <span class="text-xs font-bold text-gray-300 tracking-wider">SYSTEM ACTIVE</span>
+        </div>
+        
+        <!-- Threat Counter -->
+        <div class="flex items-center space-x-3 bg-red-950/30 px-4 py-1.5 rounded-full border border-red-900/50">
+          <span class="text-xs font-bold text-red-300 tracking-wider uppercase">Threats Blocked</span>
+          <span id="threatCount" class="text-lg font-bold text-red-400">0</span>
+        </div>
+
+        <!-- Download Report Button -->
+        <a href="/export" download="ramirez_report.txt" class="cyber-btn rounded-md px-4 py-2 text-sm font-bold flex items-center space-x-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          <span>EXPORT REPORT</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Metrics Cards with Live Sparklines -->
+    <div class="flex flex-wrap lg:flex-nowrap gap-4 w-full xl:w-auto">
+      <!-- CPU -->
+      <div class="glass-panel rounded-lg p-3 flex-1 min-w-[140px] relative overflow-hidden group">
+        <div class="absolute top-0 left-0 w-full h-1 bg-yellow-500/80"></div>
+        <div class="flex justify-between items-end mb-2">
+          <span class="text-xs font-bold text-yellow-400">CPU</span>
+          <span id="valCPU" class="text-lg font-mono font-bold text-gray-200">--%</span>
+        </div>
+        <canvas id="canvasCPU" class="metric-canvas"></canvas>
+      </div>
+      <!-- RAM -->
+      <div class="glass-panel rounded-lg p-3 flex-1 min-w-[140px] relative overflow-hidden group">
+        <div class="absolute top-0 left-0 w-full h-1 bg-blue-500/80"></div>
+        <div class="flex justify-between items-end mb-2">
+          <span class="text-xs font-bold text-blue-400">RAM</span>
+          <span id="valRAM" class="text-lg font-mono font-bold text-gray-200">--%</span>
+        </div>
+        <canvas id="canvasRAM" class="metric-canvas"></canvas>
+      </div>
+      <!-- DISK -->
+      <div class="glass-panel rounded-lg p-3 flex-1 min-w-[140px] relative overflow-hidden group">
+        <div class="absolute top-0 left-0 w-full h-1 bg-cyan-500/80"></div>
+        <div class="flex justify-between items-end mb-2">
+          <span class="text-xs font-bold text-cyan-400">DISK</span>
+          <span id="valDISK" class="text-lg font-mono font-bold text-gray-200">--%</span>
+        </div>
+        <canvas id="canvasDISK" class="metric-canvas"></canvas>
+      </div>
+      <!-- NET -->
+      <div class="glass-panel rounded-lg p-3 flex-1 min-w-[140px] relative overflow-hidden group">
+        <div class="absolute top-0 left-0 w-full h-1 bg-emerald-500/80"></div>
+        <div class="flex justify-between items-end mb-2">
+          <span class="text-xs font-bold text-emerald-400">NET Rx/Tx</span>
+          <span id="valNET" class="text-sm font-mono font-bold text-gray-200">-- KB/s</span>
+        </div>
+        <canvas id="canvasNET" class="metric-canvas"></canvas>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="flex-1 flex flex-col lg:flex-row gap-6">
+    
+    <!-- Left grids (Defense Agents) -->
+    <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+      
+      <!-- Anomaly Monitor -->
+      <div class="glass-panel rounded-xl flex flex-col overflow-hidden relative h-[300px]">
+        <div class="absolute top-0 left-0 w-full h-1 bg-amber-400" style="box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);"></div>
+        <div class="p-4 bg-gray-900/40 border-b border-gray-700/50">
+          <h2 class="font-bold text-sm tracking-widest text-white flex items-center">
+            <span class="text-amber-400 mr-2">●</span> ANOMALY MONITOR
+            <span class="info-icon" title="Evaluates CPU, RAM, Disk, Network usage slopes. If it deviates drastically from the rolling baseline (z-score probability > 50%), an alert fires.">?</span>
+          </h2>
+          <p class="text-[10px] text-gray-400 mt-1 ml-5">Watches system health for sudden algorithmic spikes. Red on prob > 50%.</p>
+        </div>
+        <div class="flex-1 p-3 overflow-hidden bg-black/20">
+          <div id="log-anomaly" class="log-container"></div>
+        </div>
+      </div>
+
+      <!-- Port Scan Detector -->
+      <div class="glass-panel rounded-xl flex flex-col overflow-hidden relative h-[300px]">
+        <div class="absolute top-0 left-0 w-full h-1 bg-red-400" style="box-shadow: 0 0 10px rgba(248, 113, 113, 0.5);"></div>
+        <div class="p-4 bg-gray-900/40 border-b border-gray-700/50">
+          <h2 class="font-bold text-sm tracking-widest text-white flex items-center">
+            <span class="text-red-400 mr-2">●</span> PORT SCAN DETECTOR
+            <span class="info-icon" title="Uses scapy to sniff raw TCP packets. If a single Source IP requests 15+ different destination ports within a 5-second window, it flags a port scan.">?</span>
+          </h2>
+          <p class="text-[10px] text-gray-400 mt-1 ml-5">Network reconnaissance detector (15+ ports / 5s).</p>
+        </div>
+        <div class="flex-1 p-3 overflow-hidden bg-black/20">
+          <div id="log-portscan" class="log-container"></div>
+        </div>
+      </div>
+
+      <!-- Kernel Monitor -->
+      <div class="glass-panel rounded-xl flex flex-col overflow-hidden relative h-[300px]">
+        <div class="absolute top-0 left-0 w-full h-1 bg-indigo-400" style="box-shadow: 0 0 10px rgba(129, 140, 248, 0.5);"></div>
+        <div class="p-4 bg-gray-900/40 border-b border-gray-700/50">
+          <h2 class="font-bold text-sm tracking-widest text-white flex items-center">
+            <span class="text-indigo-400 mr-2">●</span> KERNEL MONITOR
+            <span class="info-icon" title="Hooks into WMI to read spawn events instantly (or polls via psutil). Checks executables against known threat lists and common safe lists.">?</span>
+          </h2>
+          <p class="text-[10px] text-gray-400 mt-1 ml-5">Process auditor. Flags unknown or malicious executables instantly.</p>
+        </div>
+        <div class="flex-1 p-3 overflow-hidden bg-black/20">
+          <div id="log-kernel" class="log-container"></div>
+        </div>
+      </div>
+
+      <!-- Packet Capture -->
+      <div class="glass-panel rounded-xl flex flex-col overflow-hidden relative h-[300px]">
+        <div class="absolute top-0 left-0 w-full h-1 bg-emerald-400" style="box-shadow: 0 0 10px rgba(52, 211, 153, 0.5);"></div>
+        <div class="p-4 bg-gray-900/40 border-b border-gray-700/50">
+          <h2 class="font-bold text-sm tracking-widest text-white flex items-center">
+            <span class="text-emerald-400 mr-2">●</span> PACKET CAPTURE
+            <span class="info-icon" title="Raw packet sniffer. If traffic bursts to over 40 packets per second, it flags the row.">?</span>
+          </h2>
+          <p class="text-[10px] text-gray-400 mt-1 ml-5">Raw IP network sniffing & high-volume burst detection.</p>
+        </div>
+        <div class="flex-1 p-3 overflow-hidden bg-black/20">
+          <div id="log-packet" class="log-container"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column (Attack Console) -->
+    <div class="w-full lg:w-80 lg:min-w-[320px] flex flex-col gap-4">
+      
+      <!-- Controls -->
+      <div class="glass-panel rounded-xl p-5 border border-purple-500/20 relative">
+        <div class="absolute top-0 left-0 w-full h-1 bg-purple-500" style="box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);"></div>
+        <h2 class="text-sm font-bold tracking-widest text-purple-400 mb-1">ATTACK CONSOLE</h2>
+        <p class="text-[10px] text-gray-400 mb-5 border-b border-gray-700/50 pb-2">Simulate local attacks to test the monitors.</p>
+        
+        <div class="mb-4">
+          <label class="block text-xs font-bold text-gray-500 mb-2">TARGET IP (For Port Scan)</label>
+          <input type="text" id="targetIp" value="127.0.0.1" autocomplete="off"
+            class="w-full bg-gray-900/80 border border-gray-700 rounded-md py-2 px-3 text-purple-300 font-mono text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors">
+        </div>
+
+        <div class="space-y-3">
+          <button onclick="triggerAttack('portscan')" class="cyber-btn w-full py-2.5 rounded text-xs font-bold tracking-wider hover:text-purple-400 hover:border-purple-500 text-left px-4">⚡ PORT SCAN (Logs Alert)</button>
+          <button onclick="triggerAttack('cpu')" class="cyber-btn w-full py-2.5 rounded text-xs font-bold tracking-wider hover:text-yellow-400 hover:border-yellow-500 text-left px-4">⚡ SPIKE CPU (CPU Graph)</button>
+          <button onclick="triggerAttack('memory')" class="cyber-btn w-full py-2.5 rounded text-xs font-bold tracking-wider hover:text-blue-400 hover:border-blue-500 text-left px-4">⚡ SPIKE MEMORY (RAM Graph)</button>
+          <button onclick="triggerAttack('disk')" class="cyber-btn w-full py-2.5 rounded text-xs font-bold tracking-wider hover:text-cyan-400 hover:border-cyan-500 text-left px-4">⚡ SPIKE DISK (DISK Graph)</button>
+          <button onclick="triggerAttack('network')" class="cyber-btn w-full py-2.5 rounded text-xs font-bold tracking-wider hover:text-emerald-400 hover:border-emerald-500 text-left px-4">⚡ SPIKE NET (NET Graph)</button>
+        </div>
+      </div>
+
+      <!-- Attack Log -->
+      <div class="glass-panel rounded-xl flex-1 flex flex-col overflow-hidden h-[300px] lg:h-auto lg:min-h-[150px]">
+        <div class="p-4 bg-gray-900/40 border-b border-gray-700/50 hidden lg:block">
+          <h2 class="font-bold text-xs tracking-widest text-gray-400">ATTACK DEPLOYMENT LOG</h2>
+        </div>
+        <div class="flex-1 p-3 overflow-hidden bg-black/30">
+          <div id="log-attack" class="log-container opacity-90 text-[11px] text-purple-200"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap');
+
+:root {
+  --neon-green: #00ff88;
+  --neon-green-glow: rgba(0, 255, 136, 0.4);
+  --dark-glass: rgba(17, 24, 39, 0.6);
+  --border-glass: rgba(255, 255, 255, 0.08);
+}
+
+body {
+  margin: 0;
+  background-color: #030712;
+  color: #f3f4f6;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(0, 255, 136, 0.05), transparent 40%),
+    radial-gradient(circle at 85% 30%, rgba(0, 255, 136, 0.08), transparent 50%);
+}
+
+/* Glassmorphism Panels */
+.glass-panel {
+  background: var(--dark-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-glass);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-panel:hover {
+  border-color: rgba(0, 255, 136, 0.2);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.05), 0 4px 30px rgba(0,0,0,0.5);
+}
+
+.panel-accent-top {
+  height: 2px;
+  width: 100%;
+  background: var(--neon-green);
+  box-shadow: 0 0 10px var(--neon-green-glow);
+}
+
+/* Neon Text */
+.text-neon {
+  color: var(--neon-green);
+  text-shadow: 0 0 8px var(--neon-green-glow);
+}
+
+/* Console Logs */
+.log-container {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.log-line {
+  padding: 4px 8px;
+  border-left: 2px solid transparent;
+  color: #a7f3d0;
+  word-break: break-all;
+}
+
+.log-line.alert {
+  color: #fca5a5;
+  background: rgba(220, 38, 38, 0.15);
+  border-left-color: #ef4444;
+  font-weight: 700;
+  text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 136, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-green);
+}
+
+/* Canvas Graph */
+.metric-canvas {
+  width: 100%;
+  height: 40px;
+  border-radius: 4px;
+  background: rgba(0,0,0,0.2);
+}
+
+/* Buttons */
+.cyber-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-glass);
+  color: #d1d5db;
+  transition: all 0.2s;
+}
+.cyber-btn:hover {
+  background: rgba(0, 255, 136, 0.1);
+  border-color: var(--neon-green);
+  color: var(--neon-green);
+  box-shadow: 0 0 15px var(--neon-green-glow);
+}
+.cyber-btn:active {
+  transform: scale(0.98);
+}
+
+/* Info Tooltip Icon */
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #6b7280;
+  color: #9ca3af;
+  font-size: 10px;
+  cursor: help;
+  margin-left: 6px;
+  font-family: sans-serif;
+  vertical-align: middle;
+}
+.info-icon:hover {
+  border-color: var(--neon-green);
+  color: var(--neon-green);
+}
