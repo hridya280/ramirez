@@ -1,0 +1,8 @@
+tf_env/
+__pycache__/
+*.pyc
+.vscode/
+*.pkl
+*.h5
+*.pcap
+.ipynb_checkpoints/
